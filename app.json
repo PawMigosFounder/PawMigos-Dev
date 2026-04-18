@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "PawMigos",
+    "slug": "pawmigos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/app-icon.png",
+    "scheme": "pawmigos",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/app-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#e8734a"
+    },
+    "ios": {
+      "bundleIdentifier": "com.pawmigos.app",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "PawMigos uses your camera to let you add photos of your pets and complete provider verification.",
+        "NSPhotoLibraryUsageDescription": "PawMigos needs access to your photos to let you upload pet and profile pictures."
+      }
+    },
+    "android": {
+      "package": "com.pawmigos.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/app-icon.png",
+        "backgroundColor": "#FBF5EC"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": ["CAMERA", "READ_MEDIA_IMAGES", "READ_EXTERNAL_STORAGE"]
+    },
+    "web": {
+      "favicon": "./assets/images/app-icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "PawMigos needs access to your photos to let you upload pet and profile pictures.",
+          "cameraPermission": "PawMigos uses your camera to let you add photos of your pets and complete provider verification."
+        }
+      ]
+    ],
+    "extra": {
+      "apiBaseUrl": "http://localhost:3000"
+    }
+  }
+}

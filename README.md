@@ -1,65 +1,59 @@
-# PawMigos
+# PawMigos Mobile
 
-PawMigos is a two-sided, trust-first pet services marketplace Phase 1 Next.js application. It supports Pet Parents, Hosts/Providers, and Admin roles. 
+React Native + Expo app for iOS & Android. Talks to the existing `pawmigos-app` Next.js API.
 
-## Features
-- Validated Dual Onboarding (Pet Parents & Service Providers)
-- Complex Pet Profile & Health configurations
-- Real-time Deterministic Compatibility Engine
-- Robust Booking capabilities with slot management and concurrency checks
-- Phone OTP based Authentication (Mocked SMS in Local)
-- Signzy Abstraction (Mocked ID Verification in Local)
+## Setup
 
-## Tech Stack
-- **Framework:** Next.js 15 (App Router), React 19
-- **Language:** TypeScript
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Auth:** Custom OTP Abstraction JWT
-
-## Setup Instructions
-
-### 1. Requirements
-Ensure you have Node.js 20+ installed.
-
-### 2. Install dependencies
 ```bash
+cd pawmigos-mobile
 npm install
 ```
 
-### 3. Environment Variables
-Ensure `.env` matches the required structure:
-```env
-DATABASE_URL="postgresql://user:pass@localhost:5432/pawmigos_db"
-JWT_SECRET="pawmigos-dev-jwt-secret-change-in-production"
-OTP_EXPIRY_MINUTES=5
-OTP_MAX_ATTEMPTS=5
-OTP_RATE_LIMIT_MINUTES=1
-SMS_PROVIDER=dev
-SIGNZY_MODE=dev
-```
+## Run locally
 
-### 4. Database Setup & Seeding
-This pushes the Prisma schema directly to your local database and seeds it with structured test profiles.
+Start the web API first (in `pawmigos-app`: `npm run dev`), then:
 
 ```bash
-npm run db:push
-npm run db:seed
+npx expo start
 ```
 
-**Seed Accounts available:**
-- Consumer: `9876543210` (Priya - has 2 pets)
-- Provider: `9876543220` (Rahul - Boarding provider)
-*(Dev OTP is any 6 digits e.g. `123456`)*
+- **iOS simulator:** press `i` (uses `localhost:3000`)
+- **Android emulator:** press `a` (uses `10.0.2.2:3000`)
+- **Physical device (Expo Go):** scan QR — API base is auto-derived from Expo host URI. Override with `extra.apiBaseUrl` in `app.json` if needed.
 
-### 5. Start Development Server
+## Build for stores
+
+Install EAS:
+
 ```bash
-npm run dev
+npm i -g eas-cli
+eas login
+eas build:configure
 ```
-Navigate to `http://localhost:3000`
 
-### 6. Running Tests
-To run the automated API and Domain tests (Auth, Compatibility, Validations, Booking conflicts):
+Then:
+
 ```bash
-npm run test
+eas build --platform ios
+eas build --platform android
+eas submit --platform ios
+eas submit --platform android
 ```
+
+Bundle IDs: `com.pawmigos.app` (both platforms).
+
+## Structure
+
+- `app/` — Expo Router file-based routes
+  - `(auth)/` — phone + OTP
+  - `(consumer)/onboarding.tsx` — 3-step onboarding
+  - `(consumer)/(tabs)/` — marketplace, bookings, pets, community, profile
+  - `(provider)/` — dashboard, bookings, services, profile
+  - `(admin)/` — admin landing
+- `components/ui/` — Button, Input, Card, Badge, Select, Toggle, Screen, EmptyState
+- `lib/` — api client, auth context, session, theme, types, constants
+- `assets/images/` — logo + Pawl mascot
+
+## Auth
+
+JWT from `POST /api/auth/verify-otp` is stored in iOS Keychain / Android Keystore via `expo-secure-store` (falls back to AsyncStorage on web). Every API request auto-attaches `Authorization: Bearer <token>`.
