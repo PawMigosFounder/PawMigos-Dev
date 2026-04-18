@@ -49,6 +49,7 @@ export const BRAND = {
 
 // Cities supported in Phase 1
 export const SUPPORTED_CITIES = [
+  'Ahmedabad',
   'Mumbai',
   'Delhi',
   'Bangalore',
@@ -56,7 +57,6 @@ export const SUPPORTED_CITIES = [
   'Chennai',
   'Pune',
   'Kolkata',
-  'Ahmedabad',
   'Jaipur',
   'Gurgaon',
   'Noida',
